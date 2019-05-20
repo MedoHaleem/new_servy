@@ -1,0 +1,7 @@
+<h1>All The Todos!</h1>
+
+<ul>
+  <%= for todo <- todos do %>
+    <li><%= todo.name %> - <%= todo.project %></li>
+  <% end %>
+</ul>

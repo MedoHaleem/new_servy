@@ -2,17 +2,19 @@ defmodule Servy.TodoController do
 
   alias Servy.Project
   alias Servy.Todo
+
+    @templates_path Path.expand("../../templates", __DIR__)
+
   def index(conv) do
     items = Project.list_todos()
     |> Enum.filter(&Todo.is_career/1)
-    |> Enum.map(&todo_item/1)
-    |> Enum.join
-     %{conv | status: 200, resp_body: "<ul>#{items}</ul>"}
+
+     render(conv, "index.eex", todos: items)
   end
 
   def show(conv, %{"id" => id}) do
     todo = Project.get_todo(id)
-      %{conv | status: 200, resp_body: "ToDo #{todo.id}:#{todo.name}"}
+    render(conv, "show.eex", todo: todo)
   end
 
   def create(conv, params) do
@@ -21,5 +23,15 @@ defmodule Servy.TodoController do
 
   defp todo_item(todo) do
     "<li>#{todo.name} - #{todo.project}</li>"
+  end
+
+
+  defp render(conv, template, bindings) do
+    content =
+      @templates_path
+      |> Path.join(template)
+      |> EEx.eval_file(bindings)
+
+      %{conv | status: 200, resp_body: content}
   end
 end

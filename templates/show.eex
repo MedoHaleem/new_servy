@@ -1,0 +1,4 @@
+<h1>Show Todo</h1>
+<p>
+Is <%= todo.name %> Is it Done? <strong><%= todo.done %></strong>
+</p>
