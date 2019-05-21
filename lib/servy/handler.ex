@@ -15,7 +15,7 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "GET", path: "/todos/" <> id} = conv) do
-    params = %{conv.params | id: id}
+    params = Map.put(conv.params, "id", id)
     TodoController.show(conv, params)
   end
 
@@ -48,50 +48,13 @@ defmodule Servy.Handler do
 
   def format_response(%Conv{} = conv) do
     """
-    HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: text/html
-    Content-Length: #{String.length(conv.resp_body)}
-
+    HTTP/1.1 #{Conv.full_status(conv)}\r
+    Content-Type: text/html\r
+    Content-Length: #{String.length(conv.resp_body)}\r
+    \r
     #{conv.resp_body}
     """
   end
 
 
 end
-
-# request = """
-# GET /about HTTP/1.1
-# Host: exmaple.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-# """
-
-# response = Servy.Handler.handle(request)
-
-# IO.puts(response)
-
-
-# request = """
-# POST /todos HTTP/1.1
-# Host: exmaple.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-# Content-Type: application/x-www-form-urlencoded
-# Content-Length: 21
-
-# name=Workout&project=fitness
-# """
-
-
-request = """
-GET /todos HTTP/1.1
-Host: exmaple.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-"""
-
-response = Servy.Handler.handle(request)
-
-IO.puts(response)
-

@@ -13,6 +13,7 @@ defmodule Servy.TodoController do
   end
 
   def show(conv, %{"id" => id}) do
+     IO.inspect(id)
     todo = Project.get_todo(id)
     render(conv, "show.eex", todo: todo)
   end
