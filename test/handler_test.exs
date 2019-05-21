@@ -15,12 +15,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 200 OK\r
-    Content-Type: text/html\r
-    Content-Length: 29\r
-    \r
-    Career, Health, Relationships
-    """
+           HTTP/1.1 200 OK\r
+           Content-Type: text/html\r
+           Content-Length: 29\r
+           \r
+           Career, Health, Relationships
+           """
   end
 
   test "GET /todos" do
@@ -67,12 +67,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 404 Not Found\r
-    Content-Type: text/html\r
-    Content-Length: 17\r
-    \r
-    No /bigfoot here!
-    """
+           HTTP/1.1 404 Not Found\r
+           Content-Type: text/html\r
+           Content-Length: 17\r
+           \r
+           No /bigfoot here!
+           """
   end
 
   test "GET /todos/1" do
@@ -99,7 +99,6 @@ defmodule HandlerTest do
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
-
 
   test "GET /about" do
     request = """
@@ -142,18 +141,37 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 201 \r
-    Content-Type: text/html\r
-    Content-Length: 30\r
-    \r
-    Created a ToDo! called workout
-    """
+           HTTP/1.1 201 \r
+           Content-Type: text/html\r
+           Content-Length: 30\r
+           \r
+           Created a ToDo! called workout
+           """
   end
 
+  test "GET /api/todos" do
+    request = """
+    GET /api/todos HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
 
+    response = handle(request)
+
+    expected_response = """
+     HTTP/1.1 200 OK\r
+     Content-Type: application/json\r
+     Content-Length: 384\r
+     \r
+    [{"project":"Career","name":"StudyElixir","id":1,"done":true},{"project":"Career","name":"StudyNodeJs","id":2,"done":true},{"project":"Career","name":"StudyReact","id":3,"done":true},{"project":"Fintess","name":"Workout","id":4,"done":false},{"project":"Finacial","name":"Gethighpayingjob","id":5,"done":false},{"project":"Finacial","name":"Getmoremoney","id":6,"done":false}]
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
 
   defp remove_whitespace(text) do
     String.replace(text, ~r{\s}, "")
   end
-
 end

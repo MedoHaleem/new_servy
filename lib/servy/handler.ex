@@ -14,6 +14,10 @@ defmodule Servy.Handler do
     TodoController.index(conv)
   end
 
+    def route(%Conv{method: "GET", path: "/api/todos"} = conv) do
+    Servy.Api.TodoController.index(conv)
+  end
+
   def route(%Conv{method: "GET", path: "/todos/" <> id} = conv) do
     params = Map.put(conv.params, "id", id)
     TodoController.show(conv, params)
@@ -49,7 +53,7 @@ defmodule Servy.Handler do
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    Content-Type: text/html\r
+    Content-Type: #{conv.resp_content_Type}\r
     Content-Length: #{String.length(conv.resp_body)}\r
     \r
     #{conv.resp_body}

@@ -13,7 +13,6 @@ defmodule Servy.TodoController do
   end
 
   def show(conv, %{"id" => id}) do
-     IO.inspect(id)
     todo = Project.get_todo(id)
     render(conv, "show.eex", todo: todo)
   end
@@ -22,9 +21,9 @@ defmodule Servy.TodoController do
     %{conv | status: 201, resp_body: "Created a ToDo! called #{params["name"]}"}
   end
 
-  defp todo_item(todo) do
-    "<li>#{todo.name} - #{todo.project}</li>"
-  end
+  # defp todo_item(todo) do
+  #   "<li>#{todo.name} - #{todo.project}</li>"
+  # end
 
 
   defp render(conv, template, bindings) do
